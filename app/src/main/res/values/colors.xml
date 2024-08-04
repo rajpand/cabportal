@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <color name="text_primary_light">#000000</color> <!-- Black text color for light mode -->
+    <color name="text_secondary_light">#757575</color> <!-- Gray text color for light mode -->
+    <color name="text_primary_dark">#FFFFFF</color> <!-- White text color for dark mode -->
+    <color name="text_secondary_dark">#CCCCCC</color> <!-- Light gray text color for dark mode -->
+    <color name="transparent">#0FFFFFFF</color>
+    <color name="green">#00645B</color>
+    <color name="blue">#0D2EE6</color>
+    <color name="darkGray">#2F2F31</color>
+    <color name="gray">#D9D9E2</color>
+
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryTranslucent">#556200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+    <color name="white">#FFFFFF</color>
+    <color name="blackColor">#000000</color>
+
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/previousDestination"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:drawableStart="@drawable/baseline_access_time_24"
+            android:drawableEnd="@drawable/baseline_keyboard_arrow_right_24"
+            android:drawablePadding="8dp"
+            android:paddingVertical="2dp"
+            android:gravity="center|start"
+            android:hint="@string/search_destination"
+            android:textColorHint="@color/blackColor"
+            android:textStyle="normal" />
+
+    </RelativeLayout>
+</layout>

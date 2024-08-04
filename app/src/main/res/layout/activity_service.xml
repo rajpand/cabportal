@@ -1,0 +1,49 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/splash_screen"
+        tools:context=".activity.UserDash.DashActivity">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/sliderForService"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_alignParentTop="true" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_below="@id/sliderForService"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/transparent"
+            app:tabIndicatorColor="@color/text_primary_light"
+            app:tabIndicatorHeight="0dp"
+            app:tabSelectedTextColor="@color/green"
+            app:tabTextColor="@color/text_secondary_light" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_below="@id/tabLayout"
+            android:layout_above="@id/bottom_navigation"
+            android:layout_marginTop="10dp"
+            android:paddingBottom="10dp" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            app:itemIconSize="30dp"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/bottom__menu_item" />
+
+    </RelativeLayout>
+</layout>

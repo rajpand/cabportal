@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">Rider Cab App</string>
+    <string name="screen">screen</string>
+    <string name="powered_by_varcas_software_solution_p_ltd">Powered By : Varcas Software Solution (P). Ltd</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="next">Next</string>
+    <string name="firstslider">FirstSlider</string>
+    <string name="secondslider">SecondSlider</string>
+    <string name="email">Email</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="don_t_hav_an_account_sign_up_now">Don\'t hav an account?Sign Up Now</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="setting">Setting</string>
+    <string name="content_description">Content Description</string>
+    <string name="registration">Registration</string>
+    <string name="name">Name</string>
+    <string name="mobile_number">Mobile_Number</string>
+    <string name="aadhar_number">Aadhar Number</string>
+    <string name="save">Save</string>
+    <string name="signUp">Sign Up</string>
+    <string name="verify_otp">Verify OTP</string>
+    <string name="new_password">New Password</string>
+    <string name="pin">Pin</string>
+    <string name="conform_pin">Conform Pin</string>
+    <string name="mapkey">AIzaSyCKYQxNhOSMXZxYK9U850qYrRtJfvceZBM</string>
+    <string name="about">About</string>
+    <string name="logout">Logout</string>
+    <string name="bottom_sheet">bottom_sheet</string>
+    <string name="perform_action">Perform Action</string>
+
+    <string name="drawer_open">Open Navigation Drawer</string>
+    <string name="drawer_close">Close Navigation Drawer</string>
+    <string name="your_current_location">Your Current Location</string>
+    <string name="search_icon">Search Icon</string>
+    <string name="search_destination">Search Destination</string>
+    <string name="pick_location">Pick Location</string>
+    <string name="conform_location">Conform Location</string>
+</resources>

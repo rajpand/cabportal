@@ -1,0 +1,34 @@
+<resources>
+    <!-- Base application theme. -->
+
+    <style name="Base.Theme.RiderCabApp" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your theme here -->
+        <item name="colorPrimary">#2196F3</item> <!-- Blue primary color -->
+        <item name="colorPrimaryDark">#1976D2</item> <!-- Darker shade of primary color -->
+        <item name="colorAccent">#2196F3</item> <!-- Blue accent color -->
+        <item name="android:textColorPrimary">@color/text_primary_light
+        </item> <!-- Text color for light mode -->
+        <item name="android:textColorSecondary">@color/text_secondary_light
+        </item> <!-- Secondary text color for light mode -->
+    </style>
+    <!-- Customize your dark theme here. -->
+    <style name="AppTheme.Dark" parent="Theme.AppCompat">
+        <item name="colorPrimary">#2196F3</item>
+        <item name="colorPrimaryDark">#1976D2</item>
+        <item name="colorAccent">#2196F3</item>
+        <item name="android:textColorPrimary">@color/text_primary_dark
+        </item> <!-- Text color for dark mode -->
+        <item name="android:textColorSecondary">@color/text_secondary_dark
+        </item> <!-- Secondary text color for dark mode -->
+    </style>
+
+    <style name="CustomBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
+    </style>
+
+    <style name="CustomBottomSheet" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+</resources>
+

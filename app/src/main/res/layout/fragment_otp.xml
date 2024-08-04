@@ -1,0 +1,82 @@
+<!-- res/layout/fragment_otp.xml -->
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activity.loginActivity.fragment.OtpFragment">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/otpDigit1"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:inputType="number"
+            android:maxLength="1"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:background="@drawable/shape_retagle_with10"
+            app:layout_constraintEnd_toStartOf="@+id/otpDigit2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_margin="16dp" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/otpDigit2"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:inputType="number"
+            android:maxLength="1"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:background="@drawable/shape_retagle_with10"
+            app:layout_constraintEnd_toStartOf="@+id/otpDigit3"
+            app:layout_constraintStart_toEndOf="@+id/otpDigit1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_margin="16dp" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/otpDigit3"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:inputType="number"
+            android:maxLength="1"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:background="@drawable/shape_retagle_with10"
+            app:layout_constraintEnd_toStartOf="@+id/otpDigit4"
+            app:layout_constraintStart_toEndOf="@+id/otpDigit2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_margin="16dp" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/otpDigit4"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:inputType="number"
+            android:maxLength="1"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:background="@drawable/shape_retagle_with10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/otpDigit3"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_margin="16dp" />
+
+        <Button
+            android:id="@+id/verifyOtpButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/verify_otp"
+            app:layout_constraintTop_toBottomOf="@+id/otpDigit4"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
