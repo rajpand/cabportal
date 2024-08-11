@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.coordinatorlayout)
     implementation(libs.play.services.location)
+    implementation(libs.protolite.well.known.types)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -107,6 +108,8 @@ dependencies {
     implementation (libs.maps.utils.ktx)
     implementation (libs.androidx.coordinatorlayout)
     implementation (libs.material.v1120)
+
+    implementation (libs.places)
 
 
 

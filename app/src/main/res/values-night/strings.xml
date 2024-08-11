@@ -36,4 +36,7 @@
     <string name="search_destination">Search Destination</string>
     <string name="pick_location">Pick Location</string>
     <string name="conform_location">Conform Location</string>
+    <string name="address">Address</string>
+    <string name="location_name">Location Name</string>
+    <string name="location_address">Location Address</string>
 </resources>

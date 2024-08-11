@@ -36,7 +36,17 @@ import com.varcassoftware.ridercabapp.activity.map.fragment.BottomSheetDialog
 import java.util.Locale
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.PolylineOptions
+import com.google.maps.android.PolyUtil
+import com.varcassoftware.ridercabapp.activity.map.entity.DirectionsResponse
+import com.varcassoftware.ridercabapp.networkResponse.RetrofitBuilder
+import com.varcassoftware.ridercabapp.repository.RepositoryClass
+import com.varcassoftware.ridercabapp.utility.GlobalClasses
 import com.varcassoftware.ridercabapp.viewModelFactory.ViewModelFactory
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.IOException
 
 class MapActivity : AppCompatActivity(), BottomSheetDialog.OnClickButtonListener {
@@ -45,13 +55,17 @@ class MapActivity : AppCompatActivity(), BottomSheetDialog.OnClickButtonListener
 
     private var _binding: ActivityMapBinding? = null
     private val binding get() = _binding!!
-    private lateinit var mapViewModel : MapViewModel
+    private lateinit var mapViewModel: MapViewModel
 
     private lateinit var clusterManager: ClusterManager<Place>
     private var circle: Circle? = null
     private lateinit var drawerToggle: ActionBarDrawerToggle
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var geocoder: Geocoder
+
+    private lateinit var googleMap: GoogleMap
+    private lateinit var currentLocation: LatLng
+    private lateinit var destinationLocation: LatLng
 
     private val places: List<Place> by lazy {
         PlacesReader(this).read()
@@ -62,16 +76,18 @@ class MapActivity : AppCompatActivity(), BottomSheetDialog.OnClickButtonListener
         _binding = ActivityMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        mapViewModel = ViewModelProvider(this,ViewModelFactory(""))[MapViewModel::class.java]
-
+        mapViewModel = ViewModelProvider(
+            this, ViewModelFactory("", RepositoryClass())
+        )[MapViewModel::class.java]
         setObserver()
         setToolbar()
         setupMap()
         setClickListener()
     }
+
     private fun setObserver() {
-        mapViewModel._initValues.observe(this){
-            if(it){
+        mapViewModel._initValues.observe(this) {
+            if (it) {
                 setupBottomSheet()
                 mapViewModel._initValues.postValue(false)
             }
@@ -79,65 +95,32 @@ class MapActivity : AppCompatActivity(), BottomSheetDialog.OnClickButtonListener
     }
 
     private fun setClickListener() {
-        getCurrentLocationAndAddress(binding.toolbar.currentLocation)
+        // getCurrentLocationAndAddress(binding.toolbar.currentLocation)
         binding.toolbar.searchIcon.setOnClickListener {
             getCurrentLocationAndAddress(binding.toolbar.currentLocation)
         }
-
-
-        geocoder = Geocoder(this)/*  binding.searchDestination.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-              override fun onQueryTextSubmit(query: String?): Boolean {
-                  query?.let {
-                      if (it.isNotEmpty()) {
-                          loadAddressFromMap(it)
-                      }
-                  }
-                  return true
-              }
-
-              override fun onQueryTextChange(newText: String?): Boolean {
-
-                  return true
-              }
-          })*/
-
+        geocoder = Geocoder(this)
         binding.conformLocationButton.setOnClickListener {
             setupBottomSheet()
-            binding.conformLocationButton.visibility= View.GONE
+            binding.conformLocationButton.visibility = View.GONE
         }
 
     }
 
-    private fun loadAddressFromMap(query: String) {
-        try {
-            val addresses = geocoder.getFromLocationName(query, 1)
-            if (!addresses.isNullOrEmpty()) {
-                val address = addresses[0]
-                val addressText = address.getAddressLine(0) // Full address
-                Toast.makeText(this, "Address: $addressText", Toast.LENGTH_LONG).show()
-            } else {
-                Toast.makeText(this, "No address found", Toast.LENGTH_LONG).show()
-            }
-        } catch (e: IOException) {
-            Toast.makeText(this, "Geocoder service not available", Toast.LENGTH_LONG).show()
-        }
-    }
 
-
-    private fun getCurrentLocationAndAddress(currentLocation: AppCompatTextView) {
+    private fun getCurrentLocationAndAddress(currentLocationForTextView: AppCompatTextView) {
         if (ContextCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 location?.let {
+                    currentLocation = LatLng(it.latitude, it.longitude)
                     val geocoder = Geocoder(this, Locale.getDefault())
                     val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
-                    if (addresses != null) {
-                        if (addresses.isNotEmpty()) {
-                            val address = addresses[0].getAddressLine(0)
-                            currentLocation.setText(address)
-                        }
+                    if (!addresses.isNullOrEmpty()) {
+                        val address = addresses[0].getAddressLine(0)
+                        currentLocationForTextView.text = address
                     }
                 }
             }
@@ -149,6 +132,20 @@ class MapActivity : AppCompatActivity(), BottomSheetDialog.OnClickButtonListener
             )
         }
     }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray,
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                getCurrentLocationAndAddress(binding.toolbar.currentLocation)
+            }
+        }
+    }
+
 
     private fun setToolbar() {
         setSupportActionBar(binding.toolbar.customToolbar)
@@ -169,7 +166,7 @@ class MapActivity : AppCompatActivity(), BottomSheetDialog.OnClickButtonListener
         val mapFragment =
             supportFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
         lifecycleScope.launchWhenCreated {
-            val googleMap = mapFragment.awaitMap()
+            googleMap = mapFragment.awaitMap()
             addClusteredMarkers(googleMap)
             googleMap.awaitMapLoad()
             val bounds = LatLngBounds.builder()
@@ -230,11 +227,9 @@ class MapActivity : AppCompatActivity(), BottomSheetDialog.OnClickButtonListener
     private fun addClusteredMarkers(googleMap: GoogleMap) {
         clusterManager = ClusterManager(this, googleMap)
         clusterManager.renderer = PlaceRenderer(this, googleMap, clusterManager)
-
         clusterManager.markerCollection.setInfoWindowAdapter(MarkerInfoWindowAdapter(this))
         clusterManager.addItems(places)
         clusterManager.cluster()
-
         clusterManager.setOnClusterItemClickListener { item ->
             addCircle(googleMap, item)
             false
@@ -281,15 +276,55 @@ class MapActivity : AppCompatActivity(), BottomSheetDialog.OnClickButtonListener
         _binding = null
     }
 
-    override fun onClickButtonClickedOn(forWhat: String,massage:String) {
-        when(forWhat){
-            "1SD"->{
-                Toast.makeText(this@MapActivity, "On Click Button ClickedOn $massage", Toast.LENGTH_SHORT).show()
+    override fun onClickButtonClickedOn(forWhat: String, massage: String) {
+        when (forWhat) {
+            "1SD" -> {
+                Toast.makeText(
+                    this@MapActivity, "On Click Button ClickedOn $massage", Toast.LENGTH_SHORT
+                ).show()
             }
-            "address"->{
+            "address" -> {
                 Toast.makeText(this@MapActivity, "Address $massage", Toast.LENGTH_SHORT).show()
             }
         }
 
+    }
+
+
+    private fun fetchRoute(origin: LatLng, destination: LatLng) {
+        val originStr = "${origin.latitude},${origin.longitude}"
+        val destinationStr = "${destination.latitude},${destination.longitude}"
+        val apiKey = resources.getString(R.string.mapkey)
+
+        RetrofitBuilder.retrofitForGoogle.getDirections(originStr, destinationStr, apiKey)
+            .enqueue(object : Callback<DirectionsResponse> {
+                override fun onResponse(
+                    call: Call<DirectionsResponse>,
+                    response: Response<DirectionsResponse>,
+                ) {
+                    if (response.isSuccessful) {
+                        val directionsResponse = response.body()
+                        if (directionsResponse != null) {
+                            val points =
+                                directionsResponse.routes.firstOrNull()?.overview_polyline?.points
+                            if (points != null) {
+                                drawPolyline(points)
+                            }
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<DirectionsResponse>, t: Throwable) {
+                    // Handle the error
+                }
+            })
+    }
+
+    private fun drawPolyline(encodedPoints: String) {
+        val decodedPath = PolyUtil.decode(encodedPoints)
+        googleMap.addPolyline(
+            PolylineOptions().addAll(decodedPath)
+                .color(ContextCompat.getColor(this, R.color.colorPrimary))
+        )
     }
 }

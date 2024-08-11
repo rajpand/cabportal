@@ -7,9 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.varcassoftware.ridercabapp.activity.loginActivity.LoginActivity
+import com.varcassoftware.ridercabapp.activity.login.LoginActivity
 import com.varcassoftware.ridercabapp.activity.loginActivity.UserAccountViewModel
 import com.varcassoftware.ridercabapp.databinding.FragmentCreatePinBinding
+import com.varcassoftware.ridercabapp.repository.RepositoryClass
 import com.varcassoftware.ridercabapp.viewModelFactory.ViewModelFactory
 
 
@@ -22,7 +23,7 @@ class CreatePinFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(this, ViewModelFactory(""))[UserAccountViewModel::class.java]
+        viewModel = ViewModelProvider(this, ViewModelFactory("",RepositoryClass()))[UserAccountViewModel::class.java]
         _binding = FragmentCreatePinBinding.inflate(inflater, container, false)
         return _binding?.root
     }

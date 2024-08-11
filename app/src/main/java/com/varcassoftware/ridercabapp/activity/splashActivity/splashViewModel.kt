@@ -15,7 +15,7 @@ class SplashViewModel(private val someParameter: String) : ViewModel() {
 
     fun init() {
        viewModelScope.launch {
-           delay(5000)
+           delay(3000)
            updateLiveData()
        }
     }

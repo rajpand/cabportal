@@ -3,28 +3,44 @@ package com.varcassoftware.ridercabapp.activity.map.fragment
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
+import android.location.Geocoder
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.AutocompleteSessionToken
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
+import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.varcassoftware.ridercabapp.R
 import com.varcassoftware.ridercabapp.activity.map.SearchDestinationAdapter
+import com.varcassoftware.ridercabapp.activity.map.adapter.RecyclerViewForSearchDis
+import com.varcassoftware.ridercabapp.activity.map.entity.AddressSuggestion
 import com.varcassoftware.ridercabapp.databinding.BottomSheetLayoutBinding
+import java.io.IOException
 
 class BottomSheetDialog : BottomSheetDialogFragment(),
     SearchDestinationAdapter.OnClickItemListener {
-
+    private lateinit var geocoder: Geocoder
     private var _binding: BottomSheetLayoutBinding? = null
     private val binding get() = _binding!!
     private var listener: OnClickButtonListener? = null
+    private lateinit var destinationLocation: LatLng
+    private lateinit var placesClient: PlacesClient
+    private lateinit var autocompleteSessionToken: AutocompleteSessionToken
+    private lateinit var recyclerViewForSearchDis: RecyclerViewForSearchDis
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,
@@ -38,6 +54,7 @@ class BottomSheetDialog : BottomSheetDialogFragment(),
 
         setClickListeners()
         setupRecyclerView()
+        setupAutocomplete()
     }
 
     private fun setClickListeners() {
@@ -46,9 +63,84 @@ class BottomSheetDialog : BottomSheetDialogFragment(),
             //dismiss()
             fullScreenView()
         }
-
     }
 
+    private fun setupAutocomplete() {
+        binding.endLocation.apply {
+            isIconifiedByDefault = false
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    query?.let {
+                        if (it.isNotEmpty()) {
+                            loadAddressFromMap(it)
+                        }
+                    }
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    newText?.let {
+                        if (it.isNotEmpty()) {
+                            fetchAddressSuggestions(it)
+                        }
+                    }
+                    return true
+                }
+            })
+        }
+    }
+
+
+
+    private fun fetchAddressSuggestions(query: String) {
+        val request = FindAutocompletePredictionsRequest.builder()
+            .setSessionToken(autocompleteSessionToken)
+            .setQuery(query)
+            .build()
+
+        placesClient.findAutocompletePredictions(request).addOnSuccessListener { response ->
+            val predictionIds = response.autocompletePredictions.map { it.placeId }
+            fetchPlaceDetails(predictionIds)
+        }.addOnFailureListener { exception ->
+            Toast.makeText(activity, "Error fetching suggestions: ${exception.message}", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun fetchPlaceDetails(predictionIds: List<String>) {
+        val placeFields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG)
+
+        predictionIds.forEach { placeId ->
+            val request = FetchPlaceRequest.builder(placeId, placeFields).build()
+            placesClient.fetchPlace(request).addOnSuccessListener { response ->
+                val place = response.place
+                val suggestion = AddressSuggestion(
+                    place.name ?: "",
+                    place.address ?: "",
+                    place.latLng?.latitude ?: 0.0,
+                    place.latLng?.longitude ?: 0.0
+                )
+                updateSearchSuggestions(listOf(suggestion))
+            }.addOnFailureListener { exception ->
+                Toast.makeText(activity, "Error fetching place details: ${exception.message}", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+
+    private fun updateSearchSuggestions(suggestions: List<AddressSuggestion>) {
+        val recyclerView: RecyclerView = binding.recyclerViewForSearchDis
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerViewForSearchDis = RecyclerViewForSearchDis(
+            suggestions,
+            object : RecyclerViewForSearchDis.OnItemClickListener {
+                override fun onItemClick(address: String) {
+                    loadAddressFromMap(address)
+                    recyclerView.visibility = View.GONE
+                }
+            })
+        recyclerView.adapter = recyclerViewForSearchDis
+        recyclerView.visibility = View.VISIBLE
+    }
 
     private fun setupRecyclerView() {
         val recyclerView: RecyclerView = binding.recyclerView
@@ -69,6 +161,10 @@ class BottomSheetDialog : BottomSheetDialogFragment(),
     override fun onAttach(context: Context) {
         super.onAttach(context)
         listener = context as? OnClickButtonListener
+        geocoder = activity?.let { Geocoder(it) }!!
+        activity?.let { Places.initialize(it, resources.getString(R.string.mapkey)) }
+        placesClient = activity?.let { Places.createClient(it) }!!
+        autocompleteSessionToken = AutocompleteSessionToken.newInstance()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -118,71 +214,12 @@ class BottomSheetDialog : BottomSheetDialogFragment(),
         return dialog
     }
 
-    /* override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-         val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-         val view = LayoutInflater.from(context).inflate(R.layout.bottom_sheet_layout, null)
-         dialog.setContentView(view)
-
-         dialog.setOnShowListener { dialogInterface ->
-             val bottomSheetDialog = dialogInterface as BottomSheetDialog
-             val bottomSheet =
-                 bottomSheetDialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
-             bottomSheet?.let {
-                 val behavior = BottomSheetBehavior.from(it)
-                 behavior.peekHeight = it.height
-                 behavior.state = BottomSheetBehavior.STATE_EXPANDED
-                 behavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-                     override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                         Toast.makeText(context, "onSlide", Toast.LENGTH_SHORT).show()
-                     }
-
-                     override fun onStateChanged(bottomSheet: View, newState: Int) {
-                         //showing the different states.
-                         when (newState) {
-                             BottomSheetBehavior.STATE_HIDDEN -> {
-                                 Toast.makeText(context, "STATE_HIDDEN", Toast.LENGTH_SHORT).show()
-                             }
-
-                             BottomSheetBehavior.STATE_EXPANDED -> {
-                                 Toast.makeText(context, "STATE_EXPANDED", Toast.LENGTH_SHORT).show()
-                             }
-
-                             BottomSheetBehavior.STATE_COLLAPSED -> {
-                                 Toast.makeText(context, "STATE_COLLAPSED", Toast.LENGTH_SHORT)
-                                     .show()
-                             }
-
-                             BottomSheetBehavior.STATE_DRAGGING -> {
-                                 Toast.makeText(context, "STATE_DRAGGING", Toast.LENGTH_SHORT).show()
-                             }
-
-                             BottomSheetBehavior.STATE_SETTLING -> {
-                                 Toast.makeText(context, "STATE_SETTLING", Toast.LENGTH_SHORT).show()
-                             }
-
-                             BottomSheetBehavior.STATE_HALF_EXPANDED -> {
-                                 Toast.makeText(context, "STATE_HALF_EXPANDED", Toast.LENGTH_SHORT)
-                                     .show()
-                             }
-                         }
-                     }
-                 })
-
-             }
-             dialog.setOnCancelListener {
-                 // Doesn't matter what you write here, the dialog will be closed.
-             }
-             dialog.setOnDismissListener {
-                 // Doesn't matter what you write here, the dialog will be closed.
-             }
-         }
-         return dialog
-     }*/
 
     override fun onStart() {
         super.onStart()
         dialog?.let {
-            val bottomSheet = it.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+            val bottomSheet =
+                it.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
             val behavior = BottomSheetBehavior.from(bottomSheet!!)
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
@@ -191,7 +228,8 @@ class BottomSheetDialog : BottomSheetDialogFragment(),
 
     private fun fullScreenView() {
         dialog?.let {
-            val bottomSheet = it.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+            val bottomSheet =
+                it.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
             bottomSheet?.let { bs ->
                 val layoutParams = bs.layoutParams
                 layoutParams.height =
@@ -228,5 +266,18 @@ class BottomSheetDialog : BottomSheetDialogFragment(),
     override fun onItemClicked(forWhat: String) {
         dismiss()
         listener?.onClickButtonClickedOn("address", forWhat)
+    }
+
+    private fun loadAddressFromMap(query: String) {
+        try {
+            val addresses = geocoder.getFromLocationName(query, 1)
+            if (!addresses.isNullOrEmpty()) {
+                val address = addresses[0]
+                val addressText = address.getAddressLine(0) // Full address
+                destinationLocation = LatLng(address.latitude, address.longitude)
+            }
+        } catch (e: IOException) {
+            Toast.makeText(activity, "Geocoder service not available", Toast.LENGTH_LONG).show()
+        }
     }
 }

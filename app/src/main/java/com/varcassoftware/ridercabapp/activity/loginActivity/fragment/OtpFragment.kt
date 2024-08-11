@@ -13,6 +13,7 @@ import com.varcassoftware.ridercabapp.R
 import com.varcassoftware.ridercabapp.activity.loginActivity.UserAccountActivity
 import com.varcassoftware.ridercabapp.activity.loginActivity.UserAccountViewModel
 import com.varcassoftware.ridercabapp.databinding.FragmentOtpBinding
+import com.varcassoftware.ridercabapp.repository.RepositoryClass
 import com.varcassoftware.ridercabapp.viewModelFactory.ViewModelFactory
 
 class OtpFragment : Fragment() {
@@ -26,7 +27,7 @@ class OtpFragment : Fragment() {
     ): View {
         binding = FragmentOtpBinding.inflate(inflater, container, false)
         userAccountViewModel =
-            ViewModelProvider(this, ViewModelFactory(""))[UserAccountViewModel::class.java]
+            ViewModelProvider(this, ViewModelFactory("",RepositoryClass()))[UserAccountViewModel::class.java]
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
@@ -34,8 +35,7 @@ class OtpFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val otpDigits =
-            listOf(binding.otpDigit1, binding.otpDigit2, binding.otpDigit3, binding.otpDigit4)
+        val otpDigits = listOf(binding.otpDigit1, binding.otpDigit2, binding.otpDigit3, binding.otpDigit4)
 
         otpDigits.forEachIndexed { index, editText ->
             editText.addTextChangedListener(object : TextWatcher {

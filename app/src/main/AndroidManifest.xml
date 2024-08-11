@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
@@ -13,16 +14,41 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RiderCabApp">
         <activity
+            android:name=".activity.createpin.CreatePinActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.loginActivity.registration.RegistrationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.otp.OtpActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.map.fragment.BottomSheetDialog"
             android:exported="false" />
         <activity
-            android:name=".activity.loginActivity.LoginActivity"
+            android:name=".activity.login.LoginActivity"
             android:exported="false"
-            android:screenOrientation="fullSensor"/>
+            android:screenOrientation="fullSensor" />
         <activity
             android:name=".activity.map.MapActivity"
             android:exported="true"
-            android:screenOrientation="fullSensor">
+            android:screenOrientation="fullSensor" />
+        <activity
+            android:name=".activity.loginActivity.UserAccountActivity"
+            android:exported="false"
+            android:screenOrientation="fullSensor" />
+        <activity
+            android:name=".activity.serviceactivity.ServiceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.otpactivity.OtpVerificationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.welcomeActivity.WelcomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.splashActivity.SplashActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,32 +56,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.loginActivity.UserAccountActivity"
-            android:exported="false"
-            android:screenOrientation="fullSensor" />
-        <activity
-            android:name=".activity.serviceactivity.ServiceActivity"
-            android:exported="false"
-            android:screenOrientation="fullSensor" />
-        <activity
-            android:name=".activity.otpactivity.OtpVerificationActivity"
-            android:exported="false"
-            android:screenOrientation="fullSensor" />
-        <activity
-            android:name=".activity.welcomeActivity.WelcomeActivity"
-            android:exported="false"
-            android:screenOrientation="fullSensor" />
-        <activity
-            android:name=".activity.splashActivity.SplashActivity"
-            android:exported="false"
-            android:screenOrientation="fullSensor"></activity>
-        <activity
             android:name=".activity.MainActivity"
             android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/mapkey" />
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
     </application>
 
 </manifest>

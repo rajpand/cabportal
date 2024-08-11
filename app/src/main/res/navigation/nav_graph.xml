@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/registrationFragment"
-        android:name="com.varcassoftware.ridercabapp.activity.loginActivity.fragment.RegistrationFragment"
+        android:name="com.varcassoftware.ridercabapp.activity.loginActivity.fragment.registrationfragment.RegistrationFragment"
         android:label="fragment_registration"
         tools:layout="@layout/fragment_registration">
         <action

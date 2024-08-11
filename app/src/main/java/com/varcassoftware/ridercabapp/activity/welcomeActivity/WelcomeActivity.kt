@@ -1,6 +1,7 @@
 package com.varcassoftware.ridercabapp.activity.welcomeActivity
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -25,10 +26,9 @@ class WelcomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         binding = ActivityWelcomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-      //  welcomeViewModel = ViewModelProvider(this, ViewModelFactory(application, ""))[WelcomeViewModel::class.java]
-
         _init()
     }
 
@@ -43,7 +43,6 @@ class WelcomeActivity : AppCompatActivity() {
             supportFragmentManager,
             lifecycle
         )
-
         binding.viewPager.adapter = adapter
     }
 }

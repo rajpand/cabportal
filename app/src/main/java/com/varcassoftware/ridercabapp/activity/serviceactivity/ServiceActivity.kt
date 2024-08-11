@@ -1,6 +1,8 @@
 package com.varcassoftware.ridercabapp.activity.serviceactivity
 
+import android.app.ActivityOptions
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,20 +15,27 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.varcassoftware.ridercabapp.R
-import com.varcassoftware.ridercabapp.activity.loginActivity.UserAccountActivity
+import com.varcassoftware.ridercabapp.activity.login.LoginActivity
+import com.varcassoftware.ridercabapp.activity.map.MapActivity
 
 import com.varcassoftware.ridercabapp.activity.serviceactivity.adapter.OnServiceItemClickListener
 import com.varcassoftware.ridercabapp.activity.serviceactivity.adapter.ServiceAdapter
 import com.varcassoftware.ridercabapp.activity.serviceactivity.adapter.ServiceSliderAdapter
+import com.varcassoftware.ridercabapp.activity.welcomeActivity.WelcomeActivity
 import com.varcassoftware.ridercabapp.databinding.ActivityServiceBinding
 import com.varcassoftware.ridercabapp.entity.ServiceItem
+import com.varcassoftware.ridercabapp.localstorage.LocalStorage
+import com.varcassoftware.ridercabapp.utility.SharedPreferencesKeys
 
 class ServiceActivity : AppCompatActivity(), OnServiceItemClickListener {
-    private lateinit var binding: ActivityServiceBinding
+    private  var _binding: ActivityServiceBinding? =null
+    private  val binding get() = _binding!!
+
     private lateinit var viewPager: ViewPager2
     private lateinit var sliderAdapter: ServiceSliderAdapter
     private val viewModel: ServiceViewModel by viewModels()
     private lateinit var tabLayout: TabLayout
+    private var localStorage: LocalStorage? = null
 
     private val slideDuration: Long = 2000 // 2 seconds
     private val handler = Handler(Looper.getMainLooper())
@@ -40,12 +49,22 @@ class ServiceActivity : AppCompatActivity(), OnServiceItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityServiceBinding.inflate(layoutInflater)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        _binding = ActivityServiceBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        loadSlider()
+        setClickLisner()
+        setObserver()
+    }
 
+    private fun setClickLisner() {
+
+    }
+
+    private fun loadSlider() {
         viewPager = binding.sliderForService
         tabLayout = binding.tabLayout
-
+        _init()
         viewModel.imageList.observe(this, Observer { imageList ->
             sliderAdapter = ServiceSliderAdapter(imageList)
             viewPager.adapter = sliderAdapter
@@ -59,6 +78,9 @@ class ServiceActivity : AppCompatActivity(), OnServiceItemClickListener {
                 updateTabIndicators(position)
             }
         })
+    }
+
+    private fun setObserver() {
         binding.recyclerView.layoutManager = GridLayoutManager(this, 3)
         viewModel.serviceList.observe(this) { serviceList ->
             val adapter = ServiceAdapter(serviceList, this@ServiceActivity)
@@ -66,8 +88,13 @@ class ServiceActivity : AppCompatActivity(), OnServiceItemClickListener {
         }
     }
 
+    private fun _init() {
+        localStorage = LocalStorage(this@ServiceActivity)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
+        _binding = null
         handler.removeCallbacks(updateSlide)
     }
 
@@ -104,8 +131,19 @@ class ServiceActivity : AppCompatActivity(), OnServiceItemClickListener {
     }
 
     override fun onServiceItemClick(serviceItem: ServiceItem) {
-        val intent = Intent(this, UserAccountActivity::class.java)
-            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val intent: Intent
+        if (localStorage?.getBoolean(SharedPreferencesKeys.loginScreenStatus, false) == false) {
+            intent = Intent(this, LoginActivity::class.java)
+        } else {
+            intent = Intent(this, MapActivity::class.java)
+        }
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val options = ActivityOptions.makeCustomAnimation(
+            this,
+            R.anim.activity_fade_in, R.anim.activity_fade_out
+        )
+        startActivity(intent, options.toBundle())
         startActivity(intent)
+
     }
 }
