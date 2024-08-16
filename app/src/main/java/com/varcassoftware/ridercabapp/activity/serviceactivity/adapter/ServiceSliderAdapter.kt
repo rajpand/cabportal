@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import com.varcassoftware.ridercabapp.R
 
 class ServiceSliderAdapter(private val imageList: List<Int>) : RecyclerView.Adapter<ServiceSliderAdapter.SliderViewHolder>() {
@@ -26,7 +27,19 @@ class ServiceSliderAdapter(private val imageList: List<Int>) : RecyclerView.Adap
         private val imageView: ImageView = itemView.findViewById(R.id.imageViewServices)
 
         fun bind(imageResId: Int) {
-            imageView.setImageResource(imageResId)
+            try {
+                Picasso.get()
+                    .load(imageResId)
+                    .resize(imageView.width, imageView.height)
+                    .error(R.drawable.services_slider_1)
+                    .into(imageView)
+            }catch (e:Exception){
+                Picasso.get()
+                    .load(imageResId)
+                    .resize(100, 100)
+                    .error(R.drawable.services_slider_1)
+                    .into(imageView)
+            }
             imageView.scaleType = ImageView.ScaleType.CENTER_CROP
         }
     }

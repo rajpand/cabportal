@@ -44,10 +44,11 @@ class OtpActivity : AppCompatActivity() {
         otpViewModel.otpVerified.observe(this) { isVerified ->
             if (isVerified) {
                 otpViewModel.clearData()
-                val intent: Intent = Intent(this, MapActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                val intent: Intent = Intent(this, MapActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 val options = ActivityOptions.makeCustomAnimation(
-                    this, R.anim.activity_fade_in, R.anim.activity_fade_out
-                )
+                    this, R.anim.activity_fade_in, R.anim.activity_fade_out)
                 startActivity(intent, options.toBundle())
                 startActivity(intent)
                 finish()

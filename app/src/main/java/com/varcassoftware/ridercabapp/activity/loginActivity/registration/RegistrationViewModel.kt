@@ -104,8 +104,15 @@ class RegistrationViewModel(private val repository: Repository) : ViewModel() {
             val response = repository.createCustomerRegistration(customer)
             when (response) {
                 is ApiResponse.Success -> {
-                    withContext(Dispatchers.Main) {
-                        _customerCreated.value = "success"
+                    val responseData = response.data
+                    if(responseData.message?.contains("success",ignoreCase = true) == true){
+                        withContext(Dispatchers.Main) {
+                            _customerCreated.value = "success"
+                        }
+                    }else{
+                        withContext(Dispatchers.Main) {
+                            _customerCreated.value = "${responseData.message} Something Went Wrong. Please Try Again"
+                        }
                     }
                 }
                 is ApiResponse.Error -> {

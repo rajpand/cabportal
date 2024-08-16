@@ -91,6 +91,7 @@
                             android:drawablePadding="8dp"
                             android:hint="@string/mobile_number"
                             android:inputType="number"
+                            android:maxLength="10"
                             android:padding="8dp"
                             android:singleLine="true"
                             android:text="@={viewModel.mobileNumber}"
@@ -106,6 +107,7 @@
                             android:drawablePadding="8dp"
                             android:hint="@string/aadhar_number"
                             android:inputType="number"
+                            android:maxLength="12"
                             android:padding="8dp"
                             android:singleLine="true"
                             android:text="@={viewModel.aadharNumber}" />
@@ -124,6 +126,7 @@
                                 android:drawableEnd="@drawable/baseline_visibility_off_24"
                                 android:drawablePadding="8dp"
                                 android:hint="@string/password"
+                                android:maxLength="6"
                                 android:importantForAccessibility="yes"
                                 android:inputType="textPassword"
                                 android:padding="8dp"

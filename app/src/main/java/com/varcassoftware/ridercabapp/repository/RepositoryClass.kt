@@ -6,12 +6,16 @@ import com.varcassoftware.ridercabapp.networkResponse.RetrofitBuilder
 import com.varcassoftware.ridercabapp.networkResponse.RetrofitService
 import com.varcassoftware.ridercabapp.response.ApiResponse
 import com.varcassoftware.ridercabapp.response.ResponseCode
+import com.varcassoftware.ridercabapp.response.ResponseStatusApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class RepositoryClass : Repository {
     private val apiService: RetrofitService = RetrofitBuilder.apiService
-    override suspend fun createCustomerRegistration(customer: CustomerRegistration): ApiResponse<String> {
+
+    override suspend fun createCustomerRegistration(customer: CustomerRegistration):
+            ApiResponse<ResponseStatusApi> {
+
         return withContext(Dispatchers.IO) {
             try {
                 val response = apiService.getCustomerRegistration(customer)
@@ -34,7 +38,7 @@ class RepositoryClass : Repository {
     override suspend fun saveUserLoginDetails(userLogin: UserLogin): ApiResponse<UserLogin> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiService.saveUserLoginDetails(userLogin)
+                val response =  apiService.saveUserLoginDetails(userLogin)
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if (responseBody != null) {
@@ -47,6 +51,8 @@ class RepositoryClass : Repository {
                 }
             } catch (e: Exception) {
                 ApiResponse.Error(exception = e)
+                ApiResponse.Error("API Error: ${e.toString()}")
+
             }
         }
     }

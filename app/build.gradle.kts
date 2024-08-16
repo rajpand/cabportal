@@ -111,7 +111,7 @@ dependencies {
 
     implementation (libs.places)
 
-
+    implementation(libs.picasso)
 
 }
 

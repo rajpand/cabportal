@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -56,51 +57,47 @@ class RegistrationActivity : AppCompatActivity() {
             hideProgressDialog()
             if (it != null) {
                 if (it.equals("success", ignoreCase = true)) {
-                    registrationViewModel.resetCustomerCreated()
                     gotoNext()
                 } else {
-                    // Handle the error case if needed
-                    registrationViewModel.resetCustomerCreated()
-                    gotoNext()
+                  Toast.makeText(this@RegistrationActivity,it,Toast.LENGTH_SHORT).show()
                 }
             }
         }
 
         registrationViewModel.nameError.observe(this) {
             it?.let {
-               // binding.name.error = it
-                binding.name.requestFocus()
+                binding.name.error = it
             }
         }
 
         registrationViewModel.emailError.observe(this) {
             it?.let {
-
-                binding.email.requestFocus()
+                binding.email.error = it
             }
         }
 
         registrationViewModel.mobileNumberError.observe(this) {
             it?.let {
-                binding.mobilenumber.requestFocus()
+                binding.mobilenumber.error = it
             }
         }
 
         registrationViewModel.aadharNumberError.observe(this) {
             it?.let {
-                binding.aadharNumber.requestFocus()
+                binding.aadharNumber.error = it
             }
         }
 
         registrationViewModel.passwordError.observe(this) {
             it?.let {
-                binding.loginPassword.requestFocus()
+                binding.loginPassword.error = it
             }
         }
     }
 
     private fun gotoNext() {
-        val intent = Intent(this, OtpActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val intent = Intent(this, OtpActivity::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val options = ActivityOptions.makeCustomAnimation(
             this, R.anim.activity_fade_in, R.anim.activity_fade_out
         )

@@ -3,6 +3,8 @@ package com.varcassoftware.ridercabapp.activity.serviceactivity.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
+import com.varcassoftware.ridercabapp.R
 import com.varcassoftware.ridercabapp.databinding.OneViewForServicesBinding
 import com.varcassoftware.ridercabapp.entity.ServiceItem
 
@@ -30,6 +32,20 @@ class ServiceAdapter(
         fun bind(serviceItem: ServiceItem, listener: OnServiceItemClickListener) {
             binding.serviceTitle.text = serviceItem.title
             binding.serviceImage.setImageResource(serviceItem.imageUrl)
+            try {
+                Picasso.get()
+                    .load(serviceItem.imageUrl)
+                    .resize(binding.serviceImage.width, binding.serviceImage.height)
+                    .error(R.drawable.services_slider_1)
+                    .into(binding.serviceImage)
+            }catch (e:Exception){
+                Picasso.get()
+                Picasso.get()
+                    .load(serviceItem.imageUrl)
+                    .resize(100,100)
+                    .error(R.drawable.services_slider_1)
+                    .into(binding.serviceImage)
+            }
             binding.root.setOnClickListener {
                 listener.onServiceItemClick(serviceItem)
             }

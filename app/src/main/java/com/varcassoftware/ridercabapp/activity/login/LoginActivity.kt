@@ -16,10 +16,9 @@ import com.varcassoftware.ridercabapp.activity.loginActivity.UserAccountActivity
 import com.varcassoftware.ridercabapp.activity.loginActivity.registration.RegistrationActivity
 import com.varcassoftware.ridercabapp.activity.map.MapActivity
 import com.varcassoftware.ridercabapp.databinding.ActivityLoginBinding
-import com.varcassoftware.ridercabapp.databinding.ActivityServiceBinding
+import com.varcassoftware.ridercabapp.entity.UserLogin
 import com.varcassoftware.ridercabapp.localstorage.LocalStorage
 import com.varcassoftware.ridercabapp.repository.RepositoryClass
-import com.varcassoftware.ridercabapp.utility.GlobalClasses
 import com.varcassoftware.ridercabapp.utility.SharedPreferencesKeys
 import com.varcassoftware.ridercabapp.viewModelFactory.ViewModelFactory
 import kotlinx.coroutines.CoroutineScope
@@ -42,6 +41,8 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel = ViewModelProvider(
             this, ViewModelFactory("", RepositoryClass())
         )[LoginViewModel::class.java]
+        binding.viewModel = loginViewModel
+        binding.lifecycleOwner = this
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -62,15 +63,7 @@ class LoginActivity : AppCompatActivity() {
         binding.loginButton.setOnClickListener {
             loginViewModel.validateCredentials()
         }
-        binding.loginButton.setOnClickListener {
-            val intent = Intent(
-                this, UserAccountActivity::class.java
-            ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            val options = ActivityOptions.makeCustomAnimation(
-                this, R.anim.activity_fade_in, R.anim.activity_fade_out
-            )
-            startActivity(intent, options.toBundle())
-        }
+
 
         binding.forgotPassword.setOnClickListener {
             val intent = Intent(
@@ -92,23 +85,14 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent, options.toBundle())
         }
 
-        binding.loginButton.setOnClickListener {
-            val intent = Intent(
-                this, MapActivity::class.java
-            ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            val options = ActivityOptions.makeCustomAnimation(
-                this, R.anim.activity_fade_in, R.anim.activity_fade_out
-            )
-            startActivity(intent, options.toBundle())
-            finish()
-        }
     }
 
     private fun setObserve() {
         loginViewModel.loginResult.observe(this, Observer { isSuccess ->
             if (isSuccess) {
                 CoroutineScope(Dispatchers.IO).launch {
-                    loginViewModel.saveData()
+                    loginViewModel.saveData(UserLogin(binding.loginEmail.text.toString(),
+                        binding.loginEmail.text.toString()))
                 }
             } else {
                 Toast.makeText(this, "Invalid email or password", Toast.LENGTH_SHORT).show()
@@ -117,8 +101,7 @@ class LoginActivity : AppCompatActivity() {
 
         loginViewModel.user.observe(this, Observer {
             localStorage?.saveBoolean(SharedPreferencesKeys.loginScreenStatus, true);
-            val intent =
-                Intent(this, MapActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            val intent = Intent(this, MapActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             val options = ActivityOptions.makeCustomAnimation(
                 this, R.anim.activity_fade_in, R.anim.activity_fade_out
             )

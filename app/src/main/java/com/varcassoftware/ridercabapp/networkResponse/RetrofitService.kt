@@ -3,6 +3,7 @@ package com.varcassoftware.ridercabapp.networkResponse
 import com.example.app.model.CustomerRegistration
 import com.varcassoftware.ridercabapp.activity.map.entity.DirectionsResponse
 import com.varcassoftware.ridercabapp.entity.UserLogin
+import com.varcassoftware.ridercabapp.response.ResponseStatusApi
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -19,8 +20,8 @@ interface RetrofitService {
         @Query("key") apiKey: String
     ): Call<DirectionsResponse>
 
-    @POST("api/Customer/CustomerRegistration")
-   suspend fun getCustomerRegistration(@Body customerRegistration: CustomerRegistration): Response<String?>
+    @POST("api/Customer/CustomerRegistration/Register")
+   suspend fun getCustomerRegistration(@Body customerRegistration: CustomerRegistration): Response<ResponseStatusApi?>
 
     @POST("api/CustomerAccount/Login/Login")
      fun saveUserLoginDetails(userLogin: UserLogin): Response<UserLogin?>

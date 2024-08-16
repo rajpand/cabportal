@@ -13,33 +13,32 @@ import kotlinx.coroutines.withContext
 class LoginViewModel(val repository: Repository) : ViewModel() {
     val user = MutableLiveData<UserLogin>()
     var error = MutableLiveData<String>()
+    var firstName = MutableLiveData<String>()
+    var password = MutableLiveData<String>()
+
+
+
     val loginResult = MutableLiveData<Boolean>()
 
 
      fun validateCredentials() {
-        val userLogin = user.value ?: UserLogin("", "")
-        if (isFirstNameValid(userLogin.firstName) && isPasswordValid(userLogin.password)) {
-            loginResult.value = true
-        } else {
-            loginResult.value = false
-        }
-    }
-    suspend fun saveData(){
-        user.value?.let {
-            val response = repository.saveUserLoginDetails(it)
-            when (response) {
-                is ApiResponse.Success -> {
-                    withContext(Dispatchers.Main) {
-                        user.value = response.data
-                    }
-                }
-                is ApiResponse.Error -> {
-                    withContext(Dispatchers.Main) {
-                        error.value = response.message ?: response.exception.toString()
-                                ?: "Something Went Wrong. Please Try Again"
-                    }
+         loginResult.value  = isFirstNameValid(firstName.value?:"") && isPasswordValid(password.value?:"")
 
+    }
+    suspend fun saveData(userLogin : UserLogin){
+        val response = repository.saveUserLoginDetails(userLogin)
+        when (response) {
+            is ApiResponse.Success -> {
+                withContext(Dispatchers.Main) {
+                    user.value = response.data
                 }
+            }
+            is ApiResponse.Error -> {
+                withContext(Dispatchers.Main) {
+                    error.value = response.message ?: response.exception.toString()
+                            ?: "Something Went Wrong. Please Try Again"
+                }
+
             }
         }
 
