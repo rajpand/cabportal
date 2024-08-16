@@ -12,7 +12,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.varcassoftware.ridercabapp.R
 import com.varcassoftware.ridercabapp.activity.createpin.CreatePinActivity
-import com.varcassoftware.ridercabapp.activity.loginActivity.UserAccountActivity
 import com.varcassoftware.ridercabapp.activity.loginActivity.registration.RegistrationActivity
 import com.varcassoftware.ridercabapp.activity.map.MapActivity
 import com.varcassoftware.ridercabapp.databinding.ActivityLoginBinding

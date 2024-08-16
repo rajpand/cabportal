@@ -5,9 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.varcassoftware.ridercabapp.entity.UserLogin
 import com.varcassoftware.ridercabapp.repository.Repository
 import com.varcassoftware.ridercabapp.response.ApiResponse
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class LoginViewModel(val repository: Repository) : ViewModel() {

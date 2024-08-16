@@ -5,16 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import com.varcassoftware.ridercabapp.R
-import com.varcassoftware.ridercabapp.activity.login.LoginViewModel
 import com.varcassoftware.ridercabapp.activity.map.MapActivity
-import com.varcassoftware.ridercabapp.databinding.ActivityLoginBinding
 import com.varcassoftware.ridercabapp.databinding.ActivityOtpBinding
 import com.varcassoftware.ridercabapp.localstorage.LocalStorage
 import com.varcassoftware.ridercabapp.repository.RepositoryClass
