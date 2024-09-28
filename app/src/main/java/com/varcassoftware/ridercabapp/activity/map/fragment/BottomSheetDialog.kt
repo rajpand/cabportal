@@ -1,9 +1,12 @@
 package com.varcassoftware.ridercabapp.activity.map.fragment
 
+import android.Manifest
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.pm.PackageManager
 import android.location.Geocoder
+import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +15,13 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken
@@ -25,15 +33,19 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.varcassoftware.ridercabapp.R
+import com.varcassoftware.ridercabapp.activity.map.MapActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import com.varcassoftware.ridercabapp.activity.map.SearchDestinationAdapter
 import com.varcassoftware.ridercabapp.activity.map.adapter.RecyclerViewForSearchDis
 import com.varcassoftware.ridercabapp.activity.map.entity.AddressSuggestion
 import com.varcassoftware.ridercabapp.databinding.BottomSheetLayoutBinding
 import java.io.IOException
+import java.util.Locale
 
 class BottomSheetDialog : BottomSheetDialogFragment(),
     SearchDestinationAdapter.OnClickItemListener {
     private lateinit var geocoder: Geocoder
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
     private var _binding: BottomSheetLayoutBinding? = null
     private val binding get() = _binding!!
     private var listener: OnClickButtonListener? = null
@@ -41,7 +53,7 @@ class BottomSheetDialog : BottomSheetDialogFragment(),
     private lateinit var placesClient: PlacesClient
     private lateinit var autocompleteSessionToken: AutocompleteSessionToken
     private lateinit var recyclerViewForSearchDis: RecyclerViewForSearchDis
-
+    private lateinit var currentLocation: LatLng
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,
     ): View {
@@ -61,6 +73,7 @@ class BottomSheetDialog : BottomSheetDialogFragment(),
         binding.searchDestination.setOnClickListener {
             //listener?.onClickButtonClickedOn("1SD", "hello dear")
             //dismiss()
+
             fullScreenView()
         }
     }
@@ -108,7 +121,6 @@ class BottomSheetDialog : BottomSheetDialogFragment(),
 
     private fun fetchPlaceDetails(predictionIds: List<String>) {
         val placeFields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG)
-
         predictionIds.forEach { placeId ->
             val request = FetchPlaceRequest.builder(placeId, placeFields).build()
             placesClient.fetchPlace(request).addOnSuccessListener { response ->
@@ -165,6 +177,32 @@ class BottomSheetDialog : BottomSheetDialogFragment(),
         activity?.let { Places.initialize(it, resources.getString(R.string.mapkey)) }
         placesClient = activity?.let { Places.createClient(it) }!!
         autocompleteSessionToken = AutocompleteSessionToken.newInstance()
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
+    }
+
+
+    private fun getCurrentLocationAndAddress(currentLocationForTextView: AppCompatTextView) {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                location?.let {
+                    currentLocation = LatLng(it.latitude, it.longitude)
+                    val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
+                    if (!addresses.isNullOrEmpty()) {
+                        val address = addresses[0].getAddressLine(0)
+                        currentLocationForTextView.text = address
+                    }
+                }
+            }
+        } else {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -217,9 +255,7 @@ class BottomSheetDialog : BottomSheetDialogFragment(),
 
     override fun onStart() {
         super.onStart()
-        dialog?.let {
-            val bottomSheet =
-                it.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+        dialog?.let { val bottomSheet = it.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
             val behavior = BottomSheetBehavior.from(bottomSheet!!)
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
@@ -228,8 +264,7 @@ class BottomSheetDialog : BottomSheetDialogFragment(),
 
     private fun fullScreenView() {
         dialog?.let {
-            val bottomSheet =
-                it.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+            val bottomSheet = it.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
             bottomSheet?.let { bs ->
                 val layoutParams = bs.layoutParams
                 layoutParams.height =
@@ -237,10 +272,10 @@ class BottomSheetDialog : BottomSheetDialogFragment(),
                         ViewGroup.LayoutParams.WRAP_CONTENT
                     } else {
                         ViewGroup.LayoutParams.MATCH_PARENT
-
                     }
 
                 if (layoutParams.height == ViewGroup.LayoutParams.MATCH_PARENT) {
+                    getCurrentLocationAndAddress(binding.startLocation)
                     binding.rlSearchDesitination.visibility = View.VISIBLE
                     binding.cdDestination.visibility = View.GONE
                 } else {

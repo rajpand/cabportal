@@ -4,5 +4,6 @@ class SharedPreferencesKeys {
     companion object{
         val welcomScreenStatus ="WelcomScreenStatus"
         val loginScreenStatus ="LoginScreenStatus"
+        val loginDetails ="LoginDetails"
     }
 }

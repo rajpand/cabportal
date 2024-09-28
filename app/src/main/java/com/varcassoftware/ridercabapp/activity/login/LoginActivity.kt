@@ -2,6 +2,7 @@ package com.varcassoftware.ridercabapp.activity.login
 
 import android.app.ActivityOptions
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -10,10 +11,12 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.gson.Gson
 import com.varcassoftware.ridercabapp.R
 import com.varcassoftware.ridercabapp.activity.createpin.CreatePinActivity
 import com.varcassoftware.ridercabapp.activity.loginActivity.registration.RegistrationActivity
 import com.varcassoftware.ridercabapp.activity.map.MapActivity
+import com.varcassoftware.ridercabapp.customers.TravelingServicesActivity
 import com.varcassoftware.ridercabapp.databinding.ActivityLoginBinding
 import com.varcassoftware.ridercabapp.entity.UserLogin
 import com.varcassoftware.ridercabapp.localstorage.LocalStorage
@@ -34,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         _binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         loginViewModel = ViewModelProvider(
@@ -89,18 +92,21 @@ class LoginActivity : AppCompatActivity() {
     private fun setObserve() {
         loginViewModel.loginResult.observe(this, Observer { isSuccess ->
             if (isSuccess) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    loginViewModel.saveData(UserLogin(binding.loginEmail.text.toString(),
-                        binding.loginEmail.text.toString()))
-                }
+                loginViewModel.saveData(
+                    UserLogin(
+                        binding.loginEmail.text.toString(),
+                        binding.loginPassword.text.toString()
+                    )
+                )
             } else {
                 Toast.makeText(this, "Invalid email or password", Toast.LENGTH_SHORT).show()
             }
         })
 
-        loginViewModel.user.observe(this, Observer {
+        loginViewModel.user.observe(this, Observer { loginResponse ->
             localStorage?.saveBoolean(SharedPreferencesKeys.loginScreenStatus, true);
-            val intent = Intent(this, MapActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            localStorage?.saveString(SharedPreferencesKeys.loginDetails, Gson().toJson(loginResponse));
+            val intent = Intent(this, TravelingServicesActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             val options = ActivityOptions.makeCustomAnimation(
                 this, R.anim.activity_fade_in, R.anim.activity_fade_out
             )

@@ -1,6 +1,7 @@
 package com.varcassoftware.ridercabapp.repository
 
 import com.example.app.model.CustomerRegistration
+import com.varcassoftware.ridercabapp.entity.LoginResponseApi
 import com.varcassoftware.ridercabapp.entity.UserLogin
 import com.varcassoftware.ridercabapp.networkResponse.RetrofitBuilder
 import com.varcassoftware.ridercabapp.networkResponse.RetrofitService
@@ -35,7 +36,7 @@ class RepositoryClass : Repository {
         }
     }
 
-    override suspend fun saveUserLoginDetails(userLogin: UserLogin): ApiResponse<UserLogin> {
+    override suspend fun saveUserLoginDetails(userLogin: UserLogin): ApiResponse<LoginResponseApi> {
         return withContext(Dispatchers.IO) {
             try {
                 val response =  apiService.saveUserLoginDetails(userLogin)

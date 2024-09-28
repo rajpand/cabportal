@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="tsViewModels"
+            type="com.varcassoftware.ridercabapp.customers.viewmodels.TravelingServicesViewModels" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/toolbarCustom"
+            layout="@layout/custom_toolbar_for_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_below="@+id/toolbarCustom">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_date"
+                android:layout_width="match_parent"
+                android:layout_height="55dp">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:gravity="center|start"
+                    android:hint="@string/date"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/dateHint"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/dateHint"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:hint="@string/date"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/img_icon"
+                    app:layout_constraintStart_toEndOf="@+id/date"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/img_icon"
+                    android:layout_width="45dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:contentDescription="@string/search_icon"
+                    android:padding="10dp"
+                    android:src="@drawable/baseline_calendar_today_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/dateHint"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_toLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cl_date"
+                android:paddingVertical="10dp">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/toLocation"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/to"
+                    app:layout_constraintBottom_toBottomOf="@+id/ed_toLocation"
+                    app:layout_constraintEnd_toStartOf="@+id/ed_toLocation"
+                    app:layout_constraintHorizontal_weight="0.2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/ed_toLocation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/shape_retangle_edittoolbar"
+                    android:gravity="center|start"
+                    android:hint="@string/your_current_location"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="12dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_weight="0.8"
+                    app:layout_constraintStart_toEndOf="@+id/toLocation"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_fromLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cl_toLocation"
+                android:paddingVertical="10dp">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/fromLocation"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:gravity="center|start"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/from"
+                    app:layout_constraintBottom_toBottomOf="@+id/ed_fromLocation"
+                    app:layout_constraintEnd_toStartOf="@+id/ed_fromLocation"
+                    app:layout_constraintHorizontal_weight="0.2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/ed_fromLocation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/shape_retangle_edittoolbar"
+                    android:gravity="center|start"
+                    android:hint="@string/your_current_location"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="12dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_weight="0.8"
+                    app:layout_constraintStart_toEndOf="@+id/fromLocation"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/login_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cl_fromLocation"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="10dp"
+                android:letterSpacing="0.2"
+                android:paddingHorizontal="10dp"
+                android:text="@string/search_vehical"
+                android:textStyle="bold"
+                app:cornerRadius="10dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewForSearchDis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/login_button"
+                android:layout_marginTop="05dp"
+                tools:itemCount="5"
+                tools:listitem="@layout/one_view_forvehicaldetails" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</layout>

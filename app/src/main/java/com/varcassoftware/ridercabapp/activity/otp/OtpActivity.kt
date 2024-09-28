@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.varcassoftware.ridercabapp.R
+import com.varcassoftware.ridercabapp.activity.login.LoginActivity
 import com.varcassoftware.ridercabapp.activity.map.MapActivity
 import com.varcassoftware.ridercabapp.databinding.ActivityOtpBinding
 import com.varcassoftware.ridercabapp.localstorage.LocalStorage
@@ -38,7 +39,7 @@ class OtpActivity : AppCompatActivity() {
         otpViewModel.otpVerified.observe(this) { isVerified ->
             if (isVerified) {
                 otpViewModel.clearData()
-                val intent: Intent = Intent(this, MapActivity::class.java)
+                val intent: Intent = Intent(this, LoginActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 val options = ActivityOptions.makeCustomAnimation(

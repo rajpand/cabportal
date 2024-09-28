@@ -20,18 +20,12 @@ class ServiceViewModel : ViewModel() {
 
     private val _serviceList = MutableLiveData<List<ServiceItem>>().apply {
         value = listOf(
-            ServiceItem("Service 1", "Description for service 1", R.drawable.ic_car_cab),
-            ServiceItem("Service 2", "Description for service 2", R.drawable.ic_car),
-            ServiceItem("Service 3", "Description for service 3", R.drawable.ic_bike),
-            ServiceItem("Service 4", "Description for service 4", R.drawable.ic_car_cab),
-            ServiceItem("Service 5", "Description for service 3", R.drawable.ic_bike),
-            ServiceItem("Service 6", "Description for service 4", R.drawable.ic_car_cab),
-            ServiceItem("Service 7", "Description for service 4", R.drawable.ic_car_cab),
-            ServiceItem("Service 8", "Description for service 3", R.drawable.ic_bike),
-            ServiceItem("Service 9", "Description for service 4", R.drawable.ic_car_cab),
-            ServiceItem("Service 7", "Description for service 4", R.drawable.ic_car_cab),
-            ServiceItem("Service 8", "Description for service 3", R.drawable.ic_bike),
-            ServiceItem("Service 9", "Description for service 4", R.drawable.ic_car_cab),
+            ServiceItem("Passenger bike", "Description for service 1", R.drawable.ic_bike),
+            ServiceItem("Passenger Car", "Description for service 2", R.drawable.ic_car),
+            ServiceItem("Booking bike", "Description for service 3", R.drawable.ic_bike),
+            ServiceItem("Booking Car", "Description for service 4", R.drawable.ic_car),
+            ServiceItem("Rental Bike", "Description for service 3", R.drawable.ic_bike),
+            ServiceItem("Rental Car", "Description for service 4", R.drawable.ic_car_cab),
         )
     }
     val serviceList: LiveData<List<ServiceItem>> = _serviceList

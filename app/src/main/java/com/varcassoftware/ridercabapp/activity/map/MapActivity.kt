@@ -1,6 +1,7 @@
 package com.varcassoftware.ridercabapp.activity.map
 
 import android.Manifest
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
@@ -75,6 +76,7 @@ class MapActivity : AppCompatActivity(), BottomSheetDialog.OnClickButtonListener
         super.onCreate(savedInstanceState)
         _binding = ActivityMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         mapViewModel = ViewModelProvider(
             this, ViewModelFactory("", RepositoryClass())
@@ -95,7 +97,7 @@ class MapActivity : AppCompatActivity(), BottomSheetDialog.OnClickButtonListener
     }
 
     private fun setClickListener() {
-        // getCurrentLocationAndAddress(binding.toolbar.currentLocation)
+        getCurrentLocationAndAddress(binding.toolbar.currentLocation)
         binding.toolbar.searchIcon.setOnClickListener {
             getCurrentLocationAndAddress(binding.toolbar.currentLocation)
         }
@@ -264,7 +266,7 @@ class MapActivity : AppCompatActivity(), BottomSheetDialog.OnClickButtonListener
 
     companion object {
         val TAG = MapActivity::class.java.simpleName
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 1
+        const val LOCATION_PERMISSION_REQUEST_CODE = 1
     }
 
     private fun openBottomSheet() {

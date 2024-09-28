@@ -10,6 +10,8 @@ import com.varcassoftware.ridercabapp.activity.loginActivity.registration.Regist
 import com.varcassoftware.ridercabapp.activity.map.MapViewModel
 import com.varcassoftware.ridercabapp.activity.otp.OtpViewModel
 import com.varcassoftware.ridercabapp.activity.splashActivity.SplashViewModel
+import com.varcassoftware.ridercabapp.customers.models.BookingViewModel
+import com.varcassoftware.ridercabapp.customers.viewmodels.TravelingServicesViewModels
 import com.varcassoftware.ridercabapp.repository.Repository
 
 class ViewModelFactory(private val someParameter: String="", private val repository: Repository) :
@@ -40,6 +42,16 @@ class ViewModelFactory(private val someParameter: String="", private val reposit
         if (modelClass.isAssignableFrom(CreatePinViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST") return CreatePinViewModel(repository) as T
         }
+
+        if (modelClass.isAssignableFrom(TravelingServicesViewModels::class.java)) {
+            @Suppress("UNCHECKED_CAST") return TravelingServicesViewModels(repository) as T
+        }
+
+        if (modelClass.isAssignableFrom(BookingViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST") return BookingViewModel(repository) as T
+        }
+
+
 
         throw IllegalArgumentException("Unknown ViewModel class")
     }

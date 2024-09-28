@@ -22,6 +22,7 @@ import com.varcassoftware.ridercabapp.activity.serviceactivity.adapter.OnService
 import com.varcassoftware.ridercabapp.activity.serviceactivity.adapter.ServiceAdapter
 import com.varcassoftware.ridercabapp.activity.serviceactivity.adapter.ServiceSliderAdapter
 import com.varcassoftware.ridercabapp.activity.welcomeActivity.WelcomeActivity
+import com.varcassoftware.ridercabapp.customers.TravelingServicesActivity
 import com.varcassoftware.ridercabapp.databinding.ActivityServiceBinding
 import com.varcassoftware.ridercabapp.entity.ServiceItem
 import com.varcassoftware.ridercabapp.localstorage.LocalStorage
@@ -81,7 +82,7 @@ class ServiceActivity : AppCompatActivity(), OnServiceItemClickListener {
     }
 
     private fun setObserver() {
-        binding.recyclerView.layoutManager = GridLayoutManager(this, 3)
+        binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
         viewModel.serviceList.observe(this) { serviceList ->
             val adapter = ServiceAdapter(serviceList, this@ServiceActivity)
             binding.recyclerView.adapter = adapter
@@ -135,7 +136,7 @@ class ServiceActivity : AppCompatActivity(), OnServiceItemClickListener {
         if (localStorage?.getBoolean(SharedPreferencesKeys.loginScreenStatus, false) == false) {
             intent = Intent(this, LoginActivity::class.java)
         } else {
-            intent = Intent(this, MapActivity::class.java)
+            intent = Intent(this, TravelingServicesActivity::class.java)
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val options = ActivityOptions.makeCustomAnimation(

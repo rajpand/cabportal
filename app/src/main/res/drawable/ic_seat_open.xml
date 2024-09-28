@@ -1,0 +1,16 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="60dp"
+    android:height="60dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Background circle -->
+    <path
+        android:fillColor="#4CAF50"
+        android:pathData="M12,2a10,10 0 1,0 10,10a10,10 0 1,0 -10,-10" />
+
+    <!-- Seat icon (simplified) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M16,8h-8c-0.55,0 -1,0.45 -1,1v6c0,0.55 0.45,1 1,1h8c0.55,0 1,-0.45 1,-1v-6c0,-0.55 -0.45,-1 -1,-1zM14,14h-4v-4h4v4zM11,6h2v1h-2v-1z" />
+</vector>

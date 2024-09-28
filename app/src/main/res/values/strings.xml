@@ -42,4 +42,19 @@
     <string name="address">Address</string>
     <string name="location_name">Location Name</string>
     <string name="location_address">Location Address</string>
+    <string name="to">To</string>
+    <string name="from">From</string>
+    <string name="date">Date</string>
+    <string name="vehical">Vehical</string>
+    <string name="vehical_name">Vehical Name</string>
+    <string name="time">Time</string>
+    <string name="total_sets">Total Sets</string>
+    <string name="booked_sets">Booked Sets</string>
+    <string name="innova_7_seater">innova 7 seater</string>
+    <string name="gorakhpur_uttar_pradesh">Gorakhpur Uttar Pradesh</string>
+    <string name="_26_08_2024">26/08/2024</string>
+    <string name="_10_10_am">10:10 AM</string>
+    <string name="_20">20</string>
+    <string name="_10">10</string>
+    <string name="search_vehical">Search Vehical</string>
 </resources>

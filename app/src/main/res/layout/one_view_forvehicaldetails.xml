@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_marginVertical="5dp"
+        android:layout_height="wrap_content">
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="5dp"
+            android:elevation="5dp"
+
+            android:layout_height="wrap_content">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:paddingVertical="10dp"
+                android:layout_height="wrap_content">
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/vehical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/vehical"
+                    android:gravity="center|start"
+                    app:layout_constraintBottom_toBottomOf="@+id/vehicalName"
+                    app:layout_constraintEnd_toStartOf="@+id/vehicalName"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/vehicalName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:hint="@string/innova_7_seater"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/vehical"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!--location address-->
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/address"
+                    android:gravity="center|start"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/addressName"
+                    app:layout_constraintEnd_toStartOf="@+id/addressName"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/vehical" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/addressName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:hint="@string/gorakhpur_uttar_pradesh"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="8dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/address"
+                    app:layout_constraintTop_toBottomOf="@+id/vehical" />
+                <!--end address-->
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:background="@null"
+                    android:gravity="center|start"
+                    android:text="@string/date"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintEnd_toStartOf="@+id/dateHint"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/address" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/dateHint"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:hint="@string/_26_08_2024"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintEnd_toStartOf="@+id/time"
+                    app:layout_constraintStart_toEndOf="@+id/date"
+                    app:layout_constraintTop_toBottomOf="@+id/address" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:text="@string/time"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintEnd_toStartOf="@+id/timeHint"
+                    app:layout_constraintStart_toEndOf="@+id/dateHint"
+                    app:layout_constraintTop_toBottomOf="@+id/address" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/timeHint"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:hint="@string/_10_10_am"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/time"
+                    app:layout_constraintTop_toBottomOf="@+id/address" />
+                <!--new-->
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/totalSets"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:background="@null"
+                    android:gravity="center|start"
+                    android:text="@string/total_sets"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintEnd_toStartOf="@+id/totalSetsHint"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/date" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/totalSetsHint"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="@string/_20"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintEnd_toStartOf="@+id/time"
+                    app:layout_constraintStart_toEndOf="@+id/totalSets"
+                    app:layout_constraintTop_toBottomOf="@+id/date" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/totalBookedSets"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:text="@string/booked_sets"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintEnd_toStartOf="@+id/totalBookedSetsHint"
+                    app:layout_constraintStart_toEndOf="@+id/totalSetsHint"
+                    app:layout_constraintTop_toBottomOf="@+id/date" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/totalBookedSetsHint"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="@string/_10"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/totalBookedSets"
+                    app:layout_constraintTop_toBottomOf="@+id/date" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+
+
+
+    </LinearLayout>
+</layout>
